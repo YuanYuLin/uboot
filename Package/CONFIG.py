@@ -11,6 +11,7 @@ build_arch = ""
 image_path = ""
 image_output_name = "linux_image"
 UBOOT_VERSION="u-boot-2017.07"
+jobs_count = ""
 
 def set_global(args):
     global pkg_path
@@ -21,12 +22,14 @@ def set_global(args):
     global build_dir 
     global build_arch
     global image_path
+    global jobs_count
     pkg_args = args["pkg_args"]
     def_cfg_version = "default_" + pkg_args["version"] + ".config"
     pkg_path = args["pkg_path"]
     output_dir = args["output_path"]
     arch = ops.getEnv("ARCH_ALT")
     build_arch = ops.getEnv("ARCH")
+    jobs_count = ops.getEnv("BUILD_JOBS_COUNT")
     tarball = ops.path_join(pkg_path, UBOOT_VERSION + ".tar.bz2")
     build_dir = ops.path_join(output_dir, UBOOT_VERSION)
     src_def_config = ops.path_join(pkg_path, def_cfg_version)
@@ -38,6 +41,8 @@ def set_global(args):
     else:
         sys.exit(1)
     dst_def_config = ops.path_join(build_dir, ".config")
+    if jobs_count == "" :
+        jobs_count = "2"
 
 def MAIN_ENV(args):
     set_global(args)
@@ -70,6 +75,7 @@ def MAIN_BUILD(args):
 
     extra_conf = []
     extra_conf.append("ARCH=" + build_arch)
+    extra_conf.append("-j" + jobs_count)
     iopc.make(build_dir, extra_conf)
 
     return False
