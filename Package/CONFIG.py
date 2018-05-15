@@ -9,7 +9,7 @@ dst_def_config = ""
 build_dir = ""
 build_arch = ""
 image_path = ""
-image_output_name = "linux_image"
+image_output_name = "bootloader.bin"
 UBOOT_VERSION="u-boot-2017.07"
 jobs_count = ""
 
